@@ -1,15 +1,15 @@
-import { assertServerEnv, env } from "./env";
+import { getServerEnv } from "./env";
 
 type Opt = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
-  path: string;       // FastAPI側のパス: "/expenses" など
+  path: string; // FastAPI側のパス: "/expenses" など
   body?: unknown;
 };
 
 export const fetchUpstreamJson = async <T>(opt: Opt): Promise<T> => {
-  assertServerEnv();
+  const { FASTAPI_BASE_URL } = getServerEnv();
 
-  const base = new URL(env.FASTAPI_BASE_URL);
+  const base = new URL(FASTAPI_BASE_URL);
   const url = new URL(opt.path, base).toString();
 
   const res = await fetch(url, {
