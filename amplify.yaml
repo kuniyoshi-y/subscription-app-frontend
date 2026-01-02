@@ -1,0 +1,21 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        # Amplifyの環境変数をNextが読む .env.production に書き出す
+        - echo "FASTAPI_BASE_URL=$FASTAPI_BASE_URL" >> .env.production
+        # 必要なら（dev固定を本番でも使うなら）
+        - echo "NEXT_PUBLIC_DEV_USER_ID=$NEXT_PUBLIC_DEV_USER_ID" >> .env.production
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
