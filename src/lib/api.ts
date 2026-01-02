@@ -1,20 +1,26 @@
+import { headers } from "next/headers";
+
 type BffOk<T> = { data: T };
 type BffNg = { error: { message: string; detail?: unknown } };
 type BffResponse<T> = BffOk<T> | BffNg;
 
-const must = (value: string | undefined, name: string): string => {
-  if (!value) throw new Error(`${name} is not set`);
-  return value;
-};
+const toAbsoluteUrl = async (path: string): Promise<string> => {
+  if (path.startsWith("http")) return path;
 
-const toAbsoluteUrl = (path: string): string => {
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-
-  // Client Component（ブラウザ）なら相対でOK
+  // browser（相対URLのままでOK）
   if (typeof window !== "undefined") return path;
 
-  // Server Component（SSR）なら APP_ORIGIN で絶対URLにする
-  const origin = must(process.env.APP_ORIGIN, "APP_ORIGIN");
+  // SSR
+  const headersList = await headers();
+  const proto = headersList.get("x-forwarded-proto") ?? "https";
+  const host = headersList.get("host");
+
+  if (!host) {
+    // host が取れない = 環境が壊れてる/想定外
+    throw new Error("HOST header is missing");
+  }
+
+  const origin = `${proto}://${host}`;
   return new URL(path, origin).toString();
 };
 
@@ -55,13 +61,13 @@ const unwrap = async <T>(res: Response): Promise<T> => {
 };
 
 export const apiGet = async <T>(path: string): Promise<T> => {
-  const url = toAbsoluteUrl(path);
+  const url = await toAbsoluteUrl(path);
   const res = await fetch(url, { cache: "no-store" });
   return unwrap<T>(res);
 };
 
 export const apiPatch = async <T>(path: string, body: unknown): Promise<T> => {
-  const url = toAbsoluteUrl(path);
+  const url = await toAbsoluteUrl(path);
   const res = await fetch(url, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
@@ -71,7 +77,7 @@ export const apiPatch = async <T>(path: string, body: unknown): Promise<T> => {
 };
 
 export const apiPost = async <T>(path: string, body: unknown): Promise<T> => {
-  const url = toAbsoluteUrl(path);
+  const url = await toAbsoluteUrl(path);
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -81,7 +87,7 @@ export const apiPost = async <T>(path: string, body: unknown): Promise<T> => {
 };
 
 export const apiDelete = async <T>(path: string): Promise<T> => {
-  const url = toAbsoluteUrl(path);
+  const url = await toAbsoluteUrl(path);
   const res = await fetch(url, { method: "DELETE" });
   return unwrap<T>(res);
 };
