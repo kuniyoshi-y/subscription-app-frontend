@@ -1,5 +1,5 @@
 import { CategoryPie } from "./components/CategoryPie";
-import { apiGet } from "../lib/api";
+import { apiGet } from "@/src/lib/api/server";
 import { DashboardSummary } from "../types/dashboard";
 
 const yen = (n: number) => `${Math.round(n).toLocaleString()}円`;

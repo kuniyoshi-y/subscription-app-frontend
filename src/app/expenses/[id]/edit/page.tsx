@@ -1,4 +1,4 @@
-import { apiGet } from "@/src/lib/api";
+import { apiGet } from "@/src/lib//api/server";
 import EditExpenseClient from "./components/EditExpenseClient";
 
 type PageProps = {

@@ -1,5 +1,5 @@
 import CreateExpenseClient from "./components/CreateExpenseClient";
-import { apiGet } from "@/src/lib/api";
+import { apiGet } from "@/src/lib//api/server";
 
 type Category = { id: number; name: string };
 

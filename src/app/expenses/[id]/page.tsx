@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { apiGet } from "../../../lib/api";
+import { apiGet } from "@/src/lib/api/server";
 import DeleteExpenseButton from "./components/DeleteExpenseButton";
 
 type Expense = {
