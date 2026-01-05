@@ -61,11 +61,6 @@ Neon PostgreSQL
 - `FASTAPI_BASE_URL`  
   - FastAPI（API Gateway）への接続先
 
-### Public
-- `NEXT_PUBLIC_DEV_USER_ID`  
-  - デモ用途の固定ユーザーID  
-  - ※ `NEXT_PUBLIC_` が付く変数はブラウザに公開されます
-
 ---
 
 ## Local Development
@@ -90,31 +85,27 @@ npm run dev
 
 ## Directory Structure
 ```
-app/
-├── main.py                  # FastAPI エントリーポイント
+src/
+├── app/
+│   ├── api/                # BFF (Backend For Frontend)
+│   │   ├── _lib/            # BFF 内部共通処理（env / fetch など）
+│   │   └── dashboard/
+│   │       └── summary/
+│   │           └── route.ts
+│   ├── expenses/            # 支出関連ページ
+│   │   ├── [id]/
+│   │   │   ├── edit/
+│   │   │   └── page.tsx
+│   │   ├── new/
+│   │   └── page.tsx
+│   ├── page.tsx             # ダッシュボード
+│   └── layout.tsx
 │
-├── api/
-│   ├── expenses.py          # 支出関連 API
-│   ├── categories.py        # カテゴリ API
-│   └── dashboard.py         # 集計 API
+├── lib/
+│   ├── api/              # フロント用 API クライアント
+│   └── utils.ts
 │
-├── core/
-│   ├── config.py            # 環境変数・設定
-│
-├── db/
-│   ├── base.py              # Base 定義
-│   ├── session.py           # DB セッション管理
-│
-├── models/
-│   ├── expense.py
-│   └── category.py
-│
-├── schemas/
-│   ├── expense.py           # Pydantic Schema
-│   └── category.py
-│
-└── services/
-    └── dashboard.py         # ビジネスロジック
+└── components/              # 共通 UI コンポーネント
 ```
 
 ---
@@ -138,6 +129,14 @@ app/
 - テスト導入
   - コンポーネントテスト
   - API モックを用いた結合テスト
+- CI/CD の拡充
+	- GitHub Actions による CI 導入
+		- ESLint
+		- TypeScript 型チェック
+		- build 成功可否の検証
+	- main ブランチへのマージをトリガーにした自動デプロイ（Amplify）
+	- 将来的に PR 単位でのチェック（Preview / Check）を検討
+
 
 ---
 
