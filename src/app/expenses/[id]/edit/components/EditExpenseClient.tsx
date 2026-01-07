@@ -23,7 +23,7 @@ type Props = {
   categories: Category[];
 };
 
-export default function EditExpenseClient({ id, expense, categories }: Props) {
+const EditExpenseClient = ({ id, expense, categories }: Props) => {
   const router = useRouter();
 
   const handleSubmit = async (v: ExpenseFormValues) => {
@@ -68,4 +68,6 @@ export default function EditExpenseClient({ id, expense, categories }: Props) {
       onCreateCategory={handleCreateCategory}
     />
   );
-}
+};
+
+export default EditExpenseClient;

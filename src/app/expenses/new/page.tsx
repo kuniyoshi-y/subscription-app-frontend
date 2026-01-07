@@ -3,7 +3,7 @@ import { apiGet } from "@/src/lib//api/server";
 
 type Category = { id: number; name: string };
 
-export default async function NewExpensePage() {
+const NewExpensePage = async () => {
   let categories: Category[] = [];
   let categoriesError: string | null = null;
 
@@ -29,4 +29,6 @@ export default async function NewExpensePage() {
       </div>
     </div>
   );
-}
+};
+
+export default NewExpensePage;

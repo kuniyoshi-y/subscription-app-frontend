@@ -11,7 +11,7 @@ type Props = {
   categories: Category[];
 };
 
-export default function CreateExpenseClient({ categories }: Props) {
+const CreateExpenseClient = ({ categories }: Props) => {
   const router = useRouter();
 
   const handleSubmit = async (v: ExpenseFormValues) => {
@@ -48,4 +48,6 @@ export default function CreateExpenseClient({ categories }: Props) {
       onCreateCategory={handleCreateCategory}
     />
   );
-}
+};
+
+export default CreateExpenseClient;

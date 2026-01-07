@@ -17,7 +17,7 @@ type Expense = {
   category_id: number | null;
 };
 
-export default async function EditExpensePage({ params }: PageProps) {
+const EditExpensePage = async ({ params }: PageProps) => {
   const { id } = await params;
 
   // 並列取得（SSR最短）
@@ -33,4 +33,6 @@ export default async function EditExpensePage({ params }: PageProps) {
       <EditExpenseClient id={id} expense={expense} categories={categories} />
     </div>
   );
-}
+};
+
+export default EditExpensePage;
