@@ -1,12 +1,13 @@
 import { getServerEnv } from "./env";
 
-type Opt = {
+type BffFetchOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   path: string; // FastAPI側のパス: "/expenses" など
   body?: unknown;
+  headers?: Record<string, string>;
 };
 
-export const fetchUpstreamJson = async <T>(opt: Opt): Promise<T> => {
+export const bffFetch = async <T>(opt: BffFetchOptions): Promise<T> => {
   const { FASTAPI_BASE_URL } = getServerEnv();
 
   const base = new URL(FASTAPI_BASE_URL);
@@ -14,7 +15,10 @@ export const fetchUpstreamJson = async <T>(opt: Opt): Promise<T> => {
 
   const res = await fetch(url, {
     method: opt.method ?? "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(opt.headers ?? {}),
+    },
     body: opt.body ? JSON.stringify(opt.body) : undefined,
     cache: "no-store",
   });

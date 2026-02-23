@@ -1,5 +1,4 @@
-import { fetchUpstreamJson } from "../../_lib/http";
-import { ok, error } from "../../_lib/response";
+import { bffFetch, ok, error } from "../../_lib";
 
 const pickIdFromUrl = (req: Request): string | null => {
   const url = new URL(req.url);
@@ -14,7 +13,7 @@ export const GET = async (req: Request) => {
     const id = pickIdFromUrl(req);
     if (!id) return error(400, "Missing expense id");
 
-    const expense = await fetchUpstreamJson<unknown>({
+    const expense = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
     });
 
@@ -32,7 +31,7 @@ export const PATCH = async (req: Request) => {
 
     const body = await req.json();
 
-    const updated = await fetchUpstreamJson<unknown>({
+    const updated = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
       method: "PATCH",
       body,
@@ -51,7 +50,7 @@ export const DELETE = async (req: Request) => {
     const id = pickIdFromUrl(req);
     if (!id) return error(400, "Missing expense id");
 
-    const result = await fetchUpstreamJson<unknown>({
+    const result = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
       method: "DELETE",
     });

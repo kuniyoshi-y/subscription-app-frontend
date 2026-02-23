@@ -1,9 +1,8 @@
-import { fetchUpstreamJson } from "../_lib/http";
-import { ok, error } from "../_lib/response";
+import { bffFetch, ok, error } from "../_lib";
 
 export const GET = async () => {
   try {
-    const categories = await fetchUpstreamJson<unknown>({ path: `/categories` });
+    const categories = await bffFetch<unknown>({ path: `/categories` });
     return ok(categories);
   } catch (e: any) {
     console.error("[BFF] GET /api/categories failed:", e);
@@ -15,7 +14,7 @@ export const POST = async (req: Request) => {
   try {
     const body = await req.json(); // { name: string } を想定
 
-    const created = await fetchUpstreamJson<unknown>({
+    const created = await bffFetch<unknown>({
       path: `/categories`,
       method: "POST",
       body,

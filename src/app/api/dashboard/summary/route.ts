@@ -1,5 +1,4 @@
-import { fetchUpstreamJson } from "../../_lib/http";
-import { ok, error } from "../../_lib/response";
+import { bffFetch, ok, error } from "../../_lib";
 
 const must = (v: string | undefined, name: string) => {
   if (!v) throw new Error(`${name} is not set`);
@@ -8,7 +7,7 @@ const must = (v: string | undefined, name: string) => {
 
 export const GET = async () => {
   try {
-    const summary = await fetchUpstreamJson<unknown>({
+    const summary = await bffFetch<unknown>({
       path: `/dashboard/summary`,
     });
 
