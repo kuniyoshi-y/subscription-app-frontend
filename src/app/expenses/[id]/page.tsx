@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { apiGet } from "@/src/lib/api/server";
+import { getExpense } from "@/src/lib/bff/server";
 import DeleteExpenseButton from "./components/DeleteExpenseButton";
 
 type Expense = {
@@ -16,7 +16,7 @@ const yen = (n: number) => `${Math.round(n).toLocaleString()}円`;
 const Page = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
 
-  const expense = await apiGet<Expense>(`/api/expenses/${id}`);
+  const expense = await getExpense<Expense>({ id });
 
   return (
     <main className="mx-auto max-w-5xl p-6 space-y-4">

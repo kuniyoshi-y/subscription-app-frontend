@@ -1,11 +1,11 @@
 import { CategoryPie } from "./components/CategoryPie";
-import { apiGet } from "@/src/lib/api/server";
+import { getDashboardSummary } from "@/src/lib/bff/server";
 import { DashboardSummary } from "../types/dashboard";
 
 const yen = (n: number) => `${Math.round(n).toLocaleString()}円`;
 
 const Page = async () => {
-  const summary = await apiGet<DashboardSummary>("/api/dashboard/summary");
+  const summary = await getDashboardSummary<DashboardSummary>({});
 
   return (
     <main className="mx-auto max-w-5xl p-6">

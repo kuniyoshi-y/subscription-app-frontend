@@ -1,4 +1,4 @@
-import { apiGet } from "@/src/lib//api/server";
+import { getExpenses } from "@/src/lib/bff/server";
 import ExpensesTable from "./components/ExpensesTable";
 import Link from "next/link";
 
@@ -11,7 +11,7 @@ type Expense = {
 };
 
 const Page = async () => {
-  const expenses = await apiGet<Expense[]>("/api/expenses");
+  const expenses = await getExpenses<Expense[]>({});
 
   return (
     <main className="mx-auto max-w-5xl p-6">

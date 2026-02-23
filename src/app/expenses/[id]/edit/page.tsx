@@ -1,4 +1,4 @@
-import { apiGet } from "@/src/lib//api/server";
+import { getExpense, getCategories } from "@/src/lib/bff/server";
 import EditExpenseClient from "./components/EditExpenseClient";
 
 type PageProps = {
@@ -22,8 +22,8 @@ const EditExpensePage = async ({ params }: PageProps) => {
 
   // 並列取得（SSR最短）
   const [expense, categories] = await Promise.all([
-    apiGet<Expense>(`/api/expenses/${encodeURIComponent(id)}`),
-    apiGet<Category[]>(`/api/categories`),
+    getExpense<Expense>({ id }),
+    getCategories<Category[]>({}),
   ]);
 
   return (

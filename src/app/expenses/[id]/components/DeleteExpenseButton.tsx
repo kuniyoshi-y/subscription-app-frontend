@@ -1,6 +1,6 @@
 "use client";
 
-import { apiDelete } from "@/src/lib/api";
+import { deleteExpense } from "@/src/lib/bff/client";
 import { useRouter } from "next/navigation";
 
 const DeleteExpenseButton = ({ id }: { id: string }) => {
@@ -11,7 +11,7 @@ const DeleteExpenseButton = ({ id }: { id: string }) => {
     if (!ok) return;
 
     try {
-      await apiDelete<unknown>(`/api/expenses/${encodeURIComponent(id)}`);
+      await deleteExpense<unknown>({ id });
 
       router.push("/expenses");
       router.refresh();

@@ -1,5 +1,5 @@
 import CreateExpenseClient from "./components/CreateExpenseClient";
-import { apiGet } from "@/src/lib//api/server";
+import { getCategories } from "@/src/lib/bff/server";
 
 type Category = { id: number; name: string };
 
@@ -8,7 +8,7 @@ const NewExpensePage = async () => {
   let categoriesError: string | null = null;
 
   try {
-    categories = await apiGet<Category[]>("/api/categories");
+    categories = await getCategories<Category[]>({});
   } catch (e: any) {
     categoriesError = e?.message ?? "Failed to load categories";
     categories = [];

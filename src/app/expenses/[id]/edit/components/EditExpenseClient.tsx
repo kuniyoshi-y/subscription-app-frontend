@@ -5,7 +5,8 @@ import ExpenseForm, {
   Category,
   ExpenseFormValues,
 } from "@/src/app/expenses/components/ExpenseForm";
-import { apiPatch, apiPost, ApiError } from "@/src/lib/api";
+import { ApiError } from "@/src/lib/api";
+import { postCategory, patchExpense } from "@/src/lib/bff/client";
 
 type Expense = {
   id: string;
@@ -27,22 +28,22 @@ const EditExpenseClient = ({ id, expense, categories }: Props) => {
   const router = useRouter();
 
   const handleSubmit = async (v: ExpenseFormValues) => {
-    await apiPatch(`/api/expenses/${encodeURIComponent(id)}`, {
+    await patchExpense({ id, body: {
       name: v.name.trim(),
       amount: Number(v.amount),
       billing_cycle: v.billing_cycle,
       cancel_suggestion: v.cancel_suggestion,
       memo: v.memo.trim() ? v.memo : null,
       category_id: Number(v.category_id),
-    });
+    } });
 
-    router.push(`/expenses/${id}`);
+    router.push(`/expenses/`);
     router.refresh();
   };
 
   const handleCreateCategory = async (name: string) => {
     try {
-      return await apiPost<Category>("/api/categories", { name });
+      return await postCategory<Category>({ name });
     } catch (e) {
       if (e instanceof ApiError && e.status === 409) {
         throw new Error("同名のカテゴリが既にあります");
