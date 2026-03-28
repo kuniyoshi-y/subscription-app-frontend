@@ -21,7 +21,7 @@ export const SkeletonTable = () => (
   <div className="overflow-hidden rounded-2xl bg-white border-2 border-slate-900 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
     <div className="border-b-2 border-slate-900 bg-slate-50 px-5 py-3.5 flex gap-8">
       {[140, 80, 60, 80].map((w, i) => (
-        <Skeleton key={i} className="h-2.5" style={{ width: w }} />
+        <Skeleton key={i} className="h-2.5"/>
       ))}
     </div>
     {[...Array(5)].map((_, i) => (
