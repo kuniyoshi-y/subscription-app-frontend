@@ -6,9 +6,9 @@ export type Category = { id: number; name: string };
 
 export type ExpenseFormValues = {
   name: string;
-  amount: string; // UIでは文字列で保持（inputの都合）
+  amount: string;
   billing_cycle: "monthly" | "yearly";
-  category_id: string; // selectの都合で文字列
+  category_id: string;
   cancel_suggestion: boolean;
   memo: string;
 };
@@ -18,11 +18,14 @@ type Props = {
   defaultValues?: Partial<ExpenseFormValues>;
   submitLabel: string;
   onSubmit: (values: ExpenseFormValues) => Promise<void>;
-
-  // 任意：カテゴリの追加を有効化したい場合
   enableInlineCategoryCreate?: boolean;
   onCreateCategory?: (name: string) => Promise<Category>;
 };
+
+const inputClass =
+  "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-300 focus:border-slate-400 transition-colors";
+
+const labelClass = "block text-xs font-semibold text-slate-500";
 
 const ExpenseForm = ({
   categories,
@@ -33,7 +36,6 @@ const ExpenseForm = ({
   onCreateCategory,
 }: Props) => {
   const [categoryList, setCategoryList] = useState<Category[]>(categories);
-
   const [name, setName] = useState(defaultValues?.name ?? "");
   const [amount, setAmount] = useState(defaultValues?.amount ?? "");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
@@ -44,23 +46,17 @@ const ExpenseForm = ({
     defaultValues?.cancel_suggestion ?? false
   );
   const [memo, setMemo] = useState(defaultValues?.memo ?? "");
-
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-
-  // 新規カテゴリ作成（UIだけ共通に持たせたいならここでOK）
   const [newCategoryName, setNewCategoryName] = useState("");
   const [creatingCategory, setCreatingCategory] = useState(false);
 
   const canSave = useMemo(() => {
     if (!name.trim()) return false;
-
     const n = Number(amount);
     if (!Number.isFinite(n) || n < 0) return false;
-
     const cid = Number(categoryId);
     if (!Number.isFinite(cid) || cid <= 0) return false;
-
     return true;
   }, [name, amount, categoryId]);
 
@@ -68,17 +64,9 @@ const ExpenseForm = ({
     e.preventDefault();
     setErr(null);
     if (!canSave) return;
-
     setSaving(true);
     try {
-      await onSubmit({
-        name,
-        amount,
-        billing_cycle: billingCycle,
-        category_id: categoryId,
-        cancel_suggestion: cancelSuggestion,
-        memo,
-      });
+      await onSubmit({ name, amount, billing_cycle: billingCycle, category_id: categoryId, cancel_suggestion: cancelSuggestion, memo });
     } catch (e: any) {
       setErr(e?.message ?? "保存に失敗しました");
     } finally {
@@ -87,26 +75,13 @@ const ExpenseForm = ({
   };
 
   const handleCreateCategory = async () => {
-    if (!enableInlineCategoryCreate) return;
-    if (!onCreateCategory) {
-      setErr("カテゴリ追加処理が未設定です");
-      return;
-    }
-
+    if (!enableInlineCategoryCreate || !onCreateCategory) return;
     setErr(null);
-
     const raw = newCategoryName.trim();
-    if (!raw) {
-      setErr("カテゴリ名を入力してください");
-      return;
+    if (!raw) { setErr("カテゴリ名を入力してください"); return; }
+    if (categoryList.some((c) => c.name.toLowerCase() === raw.toLowerCase())) {
+      setErr("同名のカテゴリが既にあります"); return;
     }
-
-    const exists = categoryList.some((c) => c.name.toLowerCase() === raw.toLowerCase());
-    if (exists) {
-      setErr("同名のカテゴリが既にあります");
-      return;
-    }
-
     setCreatingCategory(true);
     try {
       const created = await onCreateCategory(raw);
@@ -121,108 +96,111 @@ const ExpenseForm = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-xl border border-zinc-200 bg-white p-4 space-y-4"
-    >
-      <div>
-        <label className="text-sm font-medium">名前</label>
-        <input
-          className="mt-1 w-full rounded-lg border border-zinc-200 p-2"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Netflix"
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* 基本情報 */}
+      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_#94a3b8] space-y-4">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">基本情報</p>
 
-      <div>
-        <label className="text-sm font-medium">金額</label>
-        <input
-          className="mt-1 w-full rounded-lg border border-zinc-200 p-2"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          inputMode="numeric"
-          placeholder="990"
-        />
-      </div>
-
-      <div>
-        <label className="text-sm font-medium">請求周期</label>
-        <select
-          className="mt-1 w-full rounded-lg border border-zinc-200 p-2"
-          value={billingCycle}
-          onChange={(e) => setBillingCycle(e.target.value as "monthly" | "yearly")}
-        >
-          <option value="monthly">monthly</option>
-          <option value="yearly">yearly</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium">カテゴリ</label>
-        <select
-          className="mt-1 w-full rounded-lg border border-zinc-200 p-2"
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-          disabled={categoryList.length === 0 && creatingCategory}
-        >
-          <option value="">選択してください</option>
-          {categoryList.map((c) => (
-            <option key={c.id} value={String(c.id)}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {enableInlineCategoryCreate ? (
-        <div className="rounded-lg border border-zinc-200 p-3">
-          <p className="text-sm font-medium">新しいカテゴリを追加</p>
-          <div className="mt-2 flex gap-2">
-            <input
-              className="w-full rounded-lg border border-zinc-200 p-2 text-sm"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="例：動画 / サブスク / 光熱費"
-            />
-            <button
-              type="button"
-              onClick={handleCreateCategory}
-              disabled={creatingCategory}
-              className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
-            >
-              {creatingCategory ? "追加中..." : "追加"}
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-zinc-500">追加後は自動で選択されます。</p>
+        <div>
+          <label className={labelClass}>サービス名</label>
+          <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} placeholder="例：Netflix、家賃" />
         </div>
-      ) : null}
 
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={cancelSuggestion}
-          onChange={(e) => setCancelSuggestion(e.target.checked)}
-        />
-        解約候補
-      </label>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>金額</label>
+            <div className="relative mt-1.5">
+              <input
+                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-800 placeholder:text-slate-300 focus:border-violet-400 transition-colors"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                inputMode="numeric"
+                placeholder="990"
+              />
+              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-400">円</span>
+            </div>
+          </div>
+          <div>
+            <label className={labelClass}>請求周期</label>
+            <select className={inputClass} value={billingCycle} onChange={(e) => setBillingCycle(e.target.value as "monthly" | "yearly")}>
+              <option value="monthly">月額</option>
+              <option value="yearly">年額</option>
+            </select>
+          </div>
+        </div>
 
-      <div>
-        <label className="text-sm font-medium">メモ</label>
-        <textarea
-          className="mt-1 w-full rounded-lg border border-zinc-200 p-2"
-          value={memo}
-          onChange={(e) => setMemo(e.target.value)}
-          rows={3}
-        />
+        <div>
+          <label className={labelClass}>カテゴリ</label>
+          <select className={inputClass} value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+            <option value="">選択してください</option>
+            {categoryList.map((c) => (
+              <option key={c.id} value={String(c.id)}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {enableInlineCategoryCreate && (
+          <div className="rounded border border-dashed border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-semibold text-slate-400 mb-2">新しいカテゴリを追加</p>
+            <div className="flex gap-2">
+              <input
+                className="w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-300 focus:border-slate-400 transition-colors"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="例：動画、光熱費"
+              />
+              <button
+                type="button"
+                onClick={handleCreateCategory}
+                disabled={creatingCategory}
+                className="shrink-0 rounded-lg bg-violet-500 border-2 border-slate-900 px-4 py-2 text-xs font-bold text-white shadow-[2px_2px_0px_#94a3b8] hover:opacity-90 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-40 transition-all duration-100"
+              >
+                {creatingCategory ? "追加中..." : "追加"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {err ? <p className="text-sm text-red-600">{err}</p> : null}
+      {/* オプション */}
+      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_#94a3b8] space-y-4">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">オプション</p>
+
+        <label className="flex cursor-pointer items-center gap-3 rounded border border-slate-200 px-4 py-3 hover:bg-slate-50 transition-colors">
+          <div className="relative shrink-0">
+            <input type="checkbox" className="sr-only" checked={cancelSuggestion} onChange={(e) => setCancelSuggestion(e.target.checked)} />
+            <div className={`h-5 w-5 rounded border-2 transition-all ${
+              cancelSuggestion ? "border-rose-500 bg-rose-500" : "border-slate-300 bg-white"
+            }`}>
+              {cancelSuggestion && (
+                <svg className="h-full w-full text-white p-0.5" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-700">解約候補にする</p>
+            <p className="text-xs text-slate-400">見直しが必要なサービスにマーク</p>
+          </div>
+        </label>
+
+        <div>
+          <label className={labelClass}>メモ</label>
+          <textarea className={`${inputClass} resize-none`} value={memo} onChange={(e) => setMemo(e.target.value)} rows={3} placeholder="備考・契約内容など" />
+        </div>
+      </div>
+
+      {err && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
+          <p className="text-sm font-semibold text-rose-600">{err}</p>
+        </div>
+      )}
 
       <button
         type="submit"
         disabled={!canSave || saving}
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="w-full rounded-xl bg-violet-500 border-2 border-slate-900 py-3 text-sm font-bold text-white shadow-[3px_3px_0px_#94a3b8] hover:opacity-90 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none disabled:opacity-40 disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[3px_3px_0px_#94a3b8] transition-all duration-100"
       >
         {saving ? "保存中..." : submitLabel}
       </button>

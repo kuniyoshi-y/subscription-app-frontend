@@ -1,43 +1,28 @@
-import { CategoryPie } from "./components/CategoryPie";
 import { getDashboardSummary } from "@/src/lib/bff/server";
 import { DashboardSummary } from "../types/dashboard";
-
-const yen = (n: number) => `${Math.round(n).toLocaleString()}円`;
+import Link from "next/link";
+import DashboardClient from "./components/DashboardClient";
 
 const Page = async () => {
   const summary = await getDashboardSummary<DashboardSummary>({});
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <h1 className="text-2xl font-bold">ダッシュボード</h1>
-
-      <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <div className="text-sm text-zinc-500">月額合計</div>
-          <div className="mt-1 text-2xl font-bold">{yen(summary.total_monthly)}</div>
+    <main className="min-h-screen px-10 py-10 animate-fade-up">
+      {/* Header */}
+      <div className="mb-8 flex items-end justify-between border-b border-slate-200 pb-6">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Overview</p>
+          <h1 className="mt-1 text-3xl font-black tracking-tight text-slate-900">ダッシュボード</h1>
         </div>
+        <Link
+          href="/expenses/new"
+          className="rounded-xl bg-violet-500 border-2 border-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-[3px_3px_0px_#94a3b8] hover:opacity-90 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+        >
+          ＋ 支出を追加
+        </Link>
+      </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <div className="text-sm text-zinc-500">年額合計</div>
-          <div className="mt-1 text-2xl font-bold">{yen(summary.total_yearly)}</div>
-        </div>
-
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <div className="text-sm text-zinc-500">解約候補</div>
-          <div className="mt-1 text-2xl font-bold">
-            <span className={summary.cancel_candidates > 0 ? "text-red-600" : ""}>
-              {summary.cancel_candidates}件
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-4 rounded-xl border border-zinc-200 bg-white p-4">
-        <h2 className="text-lg font-bold">カテゴリ別割合（月額換算）</h2>
-        <div className="mt-3">
-          <CategoryPie data={summary.by_category} />
-        </div>
-      </section>
+      <DashboardClient summary={summary} />
     </main>
   );
 };

@@ -2,21 +2,23 @@
 
 import { deleteExpense } from "@/src/lib/bff/client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const DeleteExpenseButton = ({ id }: { id: string }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onDelete = async () => {
-    const ok = window.confirm("この支出を削除します。よろしいですか？");
+    const ok = window.confirm("この支出を削除しますか？\nこの操作は取り消せません。");
     if (!ok) return;
-
+    setLoading(true);
     try {
       await deleteExpense<unknown>({ id });
-
       router.push("/expenses");
       router.refresh();
     } catch (e: any) {
       alert(e?.message ?? "削除に失敗しました");
+      setLoading(false);
     }
   };
 
@@ -24,9 +26,10 @@ const DeleteExpenseButton = ({ id }: { id: string }) => {
     <button
       type="button"
       onClick={onDelete}
-      className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+      disabled={loading}
+      className="rounded-2xl border-2 border-rose-200 bg-white px-4 py-2 text-sm font-bold text-rose-500 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-40 transition-colors shadow-sm"
     >
-      削除
+      {loading ? "削除中..." : "削除"}
     </button>
   );
 };
