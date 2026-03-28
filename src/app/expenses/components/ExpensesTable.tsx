@@ -37,7 +37,7 @@ const ExpensesTable = ({ expenses }: { expenses: Expense[] }) => {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white border-2 border-slate-900 shadow-[4px_4px_0px_#94a3b8]">
+    <div className="overflow-hidden rounded-2xl bg-white border-2 border-slate-900 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
       <table className="min-w-full">
         <thead>
           <tr className="border-b border-slate-100 bg-slate-50">

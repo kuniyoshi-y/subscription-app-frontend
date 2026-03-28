@@ -3,7 +3,7 @@ const Skeleton = ({ className }: { className?: string }) => (
 );
 
 export const SkeletonCard = ({ className }: { className?: string }) => (
-  <div className={`rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_#94a3b8] ${className ?? ""}`}>
+  <div className={`rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] ${className ?? ""}`}>
     <Skeleton className="h-2.5 w-20 mb-4" />
     <Skeleton className="h-7 w-32" />
     <Skeleton className="h-2 w-24 mt-2" />
@@ -11,14 +11,14 @@ export const SkeletonCard = ({ className }: { className?: string }) => (
 );
 
 export const SkeletonSmallCard = ({ className }: { className?: string }) => (
-  <div className={`rounded-2xl bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0px_#94a3b8] ${className ?? ""}`}>
+  <div className={`rounded-2xl bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] ${className ?? ""}`}>
     <Skeleton className="h-2.5 w-16 mb-3" />
     <Skeleton className="h-6 w-24" />
   </div>
 );
 
 export const SkeletonTable = () => (
-  <div className="overflow-hidden rounded-2xl bg-white border-2 border-slate-900 shadow-[4px_4px_0px_#94a3b8]">
+  <div className="overflow-hidden rounded-2xl bg-white border-2 border-slate-900 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
     <div className="border-b-2 border-slate-900 bg-slate-50 px-5 py-3.5 flex gap-8">
       {[140, 80, 60, 80].map((w, i) => (
         <Skeleton key={i} className="h-2.5" style={{ width: w }} />

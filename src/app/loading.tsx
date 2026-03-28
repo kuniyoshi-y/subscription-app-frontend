@@ -11,14 +11,14 @@ const Loading = () => (
     </div>
 
     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <div className="lg:col-span-2 rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_#94a3b8]">
+      <div className="lg:col-span-2 rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
         <div className="animate-pulse space-y-4">
           <div className="h-2.5 w-20 bg-slate-200 rounded-lg" />
           <div className="h-4 w-32 bg-slate-200 rounded-lg" />
           <div className="h-[260px] bg-slate-100 rounded-2xl mt-4" />
         </div>
       </div>
-      <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_#94a3b8]">
+      <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
         <div className="animate-pulse space-y-3">
           <div className="h-2.5 w-20 bg-slate-200 rounded-lg" />
           <div className="h-4 w-24 bg-slate-200 rounded-lg mb-6" />

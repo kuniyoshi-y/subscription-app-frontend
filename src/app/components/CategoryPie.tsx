@@ -69,6 +69,10 @@ export const CategoryPie = ({ data }: Props) => {
             innerRadius={50}
             paddingAngle={3}
             strokeWidth={0}
+            isAnimationActive={true}
+            animationBegin={400}
+            animationDuration={1000}
+            animationEasing="ease-out"
           >
             {chartData.map((_, index) => (
               <Cell

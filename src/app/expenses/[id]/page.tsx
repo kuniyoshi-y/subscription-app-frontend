@@ -49,7 +49,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
         <div className="flex items-center gap-2">
           <Link
             href={`/expenses/${expense.id}/edit`}
-            className="rounded-xl bg-white border-2 border-slate-900 px-4 py-2 text-sm font-bold text-slate-900 shadow-[3px_3px_0px_#94a3b8] hover:opacity-90 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-100"
+            className="rounded-xl bg-white border-2 border-slate-900 px-4 py-2 text-sm font-bold text-slate-900 shadow-[3px_3px_0px_#94a3b8] hover:-translate-y-1 hover:shadow-[4px_6px_0px_#94a3b8] active:translate-y-0 active:shadow-[3px_3px_0px_#94a3b8] transition-all duration-100"
           >
             編集
           </Link>
@@ -59,7 +59,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
 
       {/* Amount cards */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_0px_#94a3b8]">
+        <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
             {expense.billing_cycle === "monthly" ? "月額" : "年額"}
           </p>
@@ -67,7 +67,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
             ¥{yen(expense.amount)}
           </p>
         </div>
-        <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_0px_#94a3b8]">
+        <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">年間換算</p>
           <p className="mt-2 text-3xl font-black tabular-nums tracking-tight text-slate-900">
             ¥{yen(yearlyAmount)}
@@ -76,7 +76,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
       </div>
 
       {/* Detail */}
-      <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_#94a3b8]">
+      <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">詳細情報</p>
         <div className="divide-y divide-slate-100">
           <div className="flex items-center justify-between py-3.5">

@@ -21,18 +21,18 @@ const Loading = () => (
 
     {/* Amount cards */}
     <div className="grid grid-cols-2 gap-4 mb-6">
-      <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_0px_#94a3b8] animate-pulse space-y-3">
+      <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] animate-pulse space-y-3">
         <Skeleton className="h-2.5 w-12" />
         <Skeleton className="h-8 w-28" />
       </div>
-      <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_0px_#94a3b8] animate-pulse space-y-3">
+      <div className="rounded-2xl bg-white border-2 border-slate-900 p-5 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] animate-pulse space-y-3">
         <Skeleton className="h-2.5 w-12" />
         <Skeleton className="h-8 w-28" />
       </div>
     </div>
 
     {/* Detail */}
-    <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_#94a3b8]">
+    <div className="rounded-2xl bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)]">
       <Skeleton className="h-2.5 w-16 mb-6" />
       {[...Array(3)].map((_, i) => (
         <div key={i} className={`flex items-center justify-between py-3.5 ${i !== 0 ? "border-t border-slate-100" : ""}`}>

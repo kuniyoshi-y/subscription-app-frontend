@@ -98,7 +98,7 @@ const ExpenseForm = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* 基本情報 */}
-      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_#94a3b8] space-y-4">
+      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] space-y-4">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">基本情報</p>
 
         <div>
@@ -153,7 +153,7 @@ const ExpenseForm = ({
                 type="button"
                 onClick={handleCreateCategory}
                 disabled={creatingCategory}
-                className="shrink-0 rounded-lg bg-violet-500 border-2 border-slate-900 px-4 py-2 text-xs font-bold text-white shadow-[2px_2px_0px_#94a3b8] hover:opacity-90 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-40 transition-all duration-100"
+                className="shrink-0 rounded-lg bg-violet-500 border-2 border-slate-900 px-4 py-2 text-xs font-bold text-white shadow-[2px_2px_0px_#94a3b8] hover:-translate-y-0.5 hover:shadow-[3px_5px_0px_#94a3b8] active:translate-y-0 active:shadow-[2px_2px_0px_#94a3b8] disabled:opacity-40 transition-all duration-100"
               >
                 {creatingCategory ? "追加中..." : "追加"}
               </button>
@@ -163,7 +163,7 @@ const ExpenseForm = ({
       </div>
 
       {/* オプション */}
-      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_#94a3b8] space-y-4">
+      <div className="rounded-2xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_12px_rgba(0,0,0,0.12)] space-y-4">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">オプション</p>
 
         <label className="flex cursor-pointer items-center gap-3 rounded border border-slate-200 px-4 py-3 hover:bg-slate-50 transition-colors">
@@ -200,7 +200,7 @@ const ExpenseForm = ({
       <button
         type="submit"
         disabled={!canSave || saving}
-        className="w-full rounded-xl bg-violet-500 border-2 border-slate-900 py-3 text-sm font-bold text-white shadow-[3px_3px_0px_#94a3b8] hover:opacity-90 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none disabled:opacity-40 disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[3px_3px_0px_#94a3b8] transition-all duration-100"
+        className="w-full rounded-xl bg-violet-500 border-2 border-slate-900 py-3 text-sm font-bold text-white shadow-[3px_3px_0px_#94a3b8] hover:-translate-y-1 hover:shadow-[4px_6px_0px_#94a3b8] active:translate-y-0 active:shadow-[3px_3px_0px_#94a3b8] disabled:opacity-40 disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[3px_3px_0px_#94a3b8] transition-all duration-100"
       >
         {saving ? "保存中..." : submitLabel}
       </button>
