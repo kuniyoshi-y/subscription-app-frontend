@@ -1,16 +1,11 @@
-import { bffFetch, ok, error } from "../../_lib";
+import { bffFetch, ok, error, extractAuthHeader } from "../../_lib";
 
-const must = (v: string | undefined, name: string) => {
-  if (!v) throw new Error(`${name} is not set`);
-  return v;
-};
-
-export const GET = async () => {
+export const GET = async (req: Request) => {
   try {
     const summary = await bffFetch<unknown>({
       path: `/dashboard/summary`,
+      headers: extractAuthHeader(req),
     });
-
     return ok(summary);
   } catch (e: any) {
     console.error("[BFF] /api/dashboard/summary failed:", e);
