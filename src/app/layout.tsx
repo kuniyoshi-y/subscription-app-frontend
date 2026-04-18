@@ -1,14 +1,14 @@
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
+import AmplifyProvider from "./components/AmplifyProvider";
+import AppShell from "./components/AppShell";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ja">
       <body className="min-h-screen antialiased">
-        <Sidebar />
-        <div className="ml-56 min-h-screen">
-          {children}
-        </div>
+        <AmplifyProvider>
+          <AppShell>{children}</AppShell>
+        </AmplifyProvider>
       </body>
     </html>
   );
