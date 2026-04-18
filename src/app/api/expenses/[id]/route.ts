@@ -1,4 +1,4 @@
-import { bffFetch, ok, error } from "../../_lib";
+import { bffFetch, ok, error, extractAuthHeader } from "../../_lib";
 
 const pickIdFromUrl = (req: Request): string | null => {
   const url = new URL(req.url);
@@ -15,8 +15,8 @@ export const GET = async (req: Request) => {
 
     const expense = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
+      headers: extractAuthHeader(req),
     });
-
     return ok(expense);
   } catch (e: any) {
     console.error("[BFF] GET /api/expenses/[id] failed:", e);
@@ -30,20 +30,18 @@ export const PATCH = async (req: Request) => {
     if (!id) return error(400, "Missing expense id");
 
     const body = await req.json();
-
     const updated = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
       method: "PATCH",
       body,
+      headers: extractAuthHeader(req),
     });
-
     return ok(updated);
   } catch (e: any) {
     console.error("[BFF] PATCH /api/expenses/[id] failed:", e);
     return error(e?.status ?? 500, "Failed to update expense", e);
   }
 };
-
 
 export const DELETE = async (req: Request) => {
   try {
@@ -53,8 +51,8 @@ export const DELETE = async (req: Request) => {
     const result = await bffFetch<unknown>({
       path: `/expenses/${encodeURIComponent(id)}`,
       method: "DELETE",
+      headers: extractAuthHeader(req),
     });
-
     return ok(result);
   } catch (e: any) {
     console.error("[BFF] DELETE /api/expenses/[id] failed:", e);

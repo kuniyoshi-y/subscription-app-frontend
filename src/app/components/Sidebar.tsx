@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "aws-amplify/auth";
 
 const navItems = [
   { href: "/", label: "ダッシュボード" },
@@ -11,11 +12,17 @@ const navItems = [
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace("/login");
+  };
+
   return (
-    <aside className="fixed inset-y-0 left-0 z-20 flex w-56 flex-col bg-white border-r border-slate-200">
+    <aside className="fixed inset-y-0 left-0 z-20 hidden md:flex w-56 flex-col bg-white border-r border-slate-200">
       {/* Logo */}
       <div className="px-5 pt-6 pb-5">
         <div className="flex items-center gap-3">
@@ -55,8 +62,14 @@ const Sidebar = () => {
 
       <div className="mx-5 h-px bg-slate-100" />
 
-      <div className="px-5 py-4">
-        <p className="text-[10px] font-medium text-slate-300">v0.1.0</p>
+      <div className="px-4 py-4 space-y-3">
+        <button
+          onClick={handleSignOut}
+          className="w-full flex items-center rounded-xl px-3 py-2.5 text-sm font-bold text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all duration-150"
+        >
+          ログアウト
+        </button>
+        <p className="px-1 text-[10px] font-medium text-slate-300">v0.1.0</p>
       </div>
     </aside>
   );
